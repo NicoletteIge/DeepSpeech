@@ -60,4 +60,11 @@ def audiofile_to_input_vector(audio_filename, numcep, numcontext):
     # Load wav files
     fs, audio = wav.read(audio_filename)
 
+    # if audio have more than 1 dimension, take the mean of all the channels as one channel
+    if len(audio.shape) > 1:
+        audio = audio.mean(axis=1, dtype=np.int16)
+
+    # Get mfcc coefficients
+    orig_inputs = mfcc(audio, samplerate=fs, numcep=numcep)
+    
     return audioToInputVector(audio, fs, numcep, numcontext)
